@@ -24,6 +24,10 @@ adjectives = []
 nouns = []
 numbers = []
 
+###TODO: actual leetness
+# we'll popen these here with this url, with a length, real EZ
+# curl --silent 'https://www.morewords.com/wordsbylength/15a/' > 15.html
+# cat 15.html | grep -oE '\/word\/(\w*)\/' |& awk 'FS="/"{print $3;}'
 
 # Get the words from adjectives.txt and nouns.txt
 def get_words():
