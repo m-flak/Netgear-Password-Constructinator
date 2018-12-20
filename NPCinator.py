@@ -27,8 +27,9 @@ nouns = []
 numbers = []
 
 INPUT_ESSID = ""
+INPUTTED_STUFF = False
 
-lazy_abcs = "abcdefghijklmopqrstuvwxyz"
+lazy_abcs = "abcdefghijklmnopqrstuvwxyz"
 
 ###TODO: actual leetness
 # we'll popen these here with this url, with a length, real EZ
@@ -69,7 +70,7 @@ def get_nouns_of_length(len_noun, letter):
     pulled_nouns = pulled_nouns.split('\n')
     nouns += pulled_nouns
     
-    if 'z' in lazy_abcs[letter]:
+    if 'z' in lazy_abcs[letter] or len(lazy_abcs) == letter:
         return
     
     return get_nouns_of_length(len_noun, letter+1)
@@ -79,6 +80,7 @@ def get_nouns_of_length(len_noun, letter):
 def get_words():
     global adjectives
     global nouns
+    global INPUTTED_STUFF
     f = open("adjectives.txt", "r")
     a = f.read()
     adjectives = a.split('\n')
@@ -86,7 +88,10 @@ def get_words():
     
     f = open("nouns.txt", "r")
     n = f.read()
-    nouns = n.split('\n')
+    if INPUTTED_STUFF is not True:
+        nouns = n.split('\n')
+    else:
+        nouns += n.split('\n')
     f.close()
 
 # Generate a list of numbers from 000 to 999
@@ -126,8 +131,10 @@ def smoosh():
 
 if len(sys.argv) >= 2:
     INPUT_ESSID = sys.argv[1]
+    INPUTTED_STUFF = True
 
-get_nouns_of_length(get_noun_length_spectrum(INPUT_ESSID), 0)
+if INPUTTED_STUFF is True:
+    get_nouns_of_length(get_noun_length_spectrum(INPUT_ESSID), 0)
 
 get_words()
 number_gen()
