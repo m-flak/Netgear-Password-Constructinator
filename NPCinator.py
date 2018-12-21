@@ -18,9 +18,11 @@
 #
 # Adjective and Noun files downloaded from: http://www.ashley-bovan.co.uk/words/partsofspeech.html
 #
+import os
 import sys
 import subprocess
-from binascii import unhexlify
+import logging
+import datetime
 
 adjectives = []
 nouns = []
@@ -71,6 +73,9 @@ def get_nouns_of_length(len_noun, letter):
     nouns += pulled_nouns
     
     if 'z' in lazy_abcs[letter] or len(lazy_abcs) == letter:
+        fd = os.open("{0}.html".format(len_noun),os.O_RDWR | os.O_CREAT | os.O_TRUNC)
+        os.write(fd,b'\x0D\x0A')
+        os.close(fd)
         return
     
     return get_nouns_of_length(len_noun, letter+1)
@@ -117,7 +122,8 @@ def smoosh():
     global adjectives
     global nouns
     global numbers
-    #f = open("default-netgear-passwords.txt", "w+")  
+    #f = open("default-netgear-passwords.txt", "w+")
+    logging.info("Smoosh'ing {} nouns and {} adjectives. WOW...\r\n".format(len(nouns), len(adjectives)))
     for a in adjectives:
         for n in nouns:
             for i in numbers:
@@ -127,7 +133,9 @@ def smoosh():
                 #f.write(password + "\n")
     #f.close()
 
-
+####
+logging.basicConfig(filename='npcinator.log',level=logging.DEBUG)
+logging.info("{} AT {}:".format(sys.argv[0],datetime.datetime.now()))
 
 if len(sys.argv) >= 2:
     INPUT_ESSID = sys.argv[1]
