@@ -59,6 +59,9 @@ def get_nouns_of_length(len_noun, letter):
     global lazy_abcs
     global nouns
     
+    if len_noun == 0:
+        return
+    
     open("{0}.html".format(len_noun), 'a').close()
     
     curled_url = "curl --silent 'https://www.morewords.com/wordsbylength/%d%s' >> %d.html" % (len_noun, lazy_abcs[letter], len_noun)
