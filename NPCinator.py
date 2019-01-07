@@ -30,6 +30,7 @@ numbers = []
 
 INPUT_ESSID = ""
 INPUTTED_STUFF = False
+NG_XXX = dict()
 
 lazy_abcs = "abcdefghijklmnopqrstuvwxyz"
 
@@ -38,6 +39,28 @@ lazy_abcs = "abcdefghijklmnopqrstuvwxyz"
 # curl --silent 'https://www.morewords.com/wordsbylength/15a/' > 15.html
 # cat 15.html | grep -oE '\/word\/(\w*)\/' |& awk 'FS="/"{print $3;}'
 
+def get_ng_name():
+    global NG_XXX
+    plus_me = 0
+    
+    if len(NG_XXX.items()) is not 0:
+        plus_me = NG_XXX['dec']
+    
+    return "NETGEAR%d" % plus_me
+
+def setup_ng_name(sixteen_0, sixteen_1):
+    global NG_XXX
+    
+    if len(NG_XXX.items()) is 0:
+        hexxy = int(1*sixteen_1|sixteen_0)
+        deccy = sixteen_0 + sixteen_1*1
+        
+        NG_XXX = { 'hex': hexxy,
+                   'dec': deccy,
+        }
+    
+    return
+        
 def get_noun_length_spectrum(essid):
     prefix = "MySpectrumWiFi"
     
@@ -47,6 +70,7 @@ def get_noun_length_spectrum(essid):
     hexa_byte = essid[len(prefix)::1]
     hexa_byte = bytes(hexa_byte[0:2])
     ones, teens = int(hexa_byte,16) & 0x0F, int(hexa_byte,16) >> 1
+    setup_ng_name(ones, teens)
     
     noun_length = ones+teens
     if noun_length > 15:
@@ -146,6 +170,7 @@ if len(sys.argv) >= 2:
 
 if INPUTTED_STUFF is True:
     get_nouns_of_length(get_noun_length_spectrum(INPUT_ESSID), 0)
+    logging.info("{} as originate essid derived from input: {}".format(get_ng_name(),INPUT_ESSID))
 
 get_words()
 number_gen()
